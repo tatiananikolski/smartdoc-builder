@@ -41,7 +41,7 @@ def generate_prompt(form_type, custom_input, tone):
 def call_openai_api(prompt):
     openai.api_key = os.getenv("OPENAI_API_KEY")  # Set your API key as env variable
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": "You are a helpful assistant that generates medical forms."},
             {"role": "user", "content": prompt}
