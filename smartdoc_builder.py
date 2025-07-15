@@ -168,7 +168,35 @@ if st.button("Generate Form"):
         prompt = generate_prompt(form_type, custom_input, tone)
 
         if demo_mode:
-            form_output = SAMPLE_FORMS.get(form_type, "<p><em>Custom demo form output here.</em></p>")
+            form_outpuif form_type == "Custom":
+    form_output = """
+    <h2>Dermatology Referral Form</h2>
+    <form>
+      <label>Patient Name:</label><br>
+      <input type="text"><br><br>
+
+      <label>Date of Birth:</label><br>
+      <input type="date"><br><br>
+
+      <label>Diagnosis:</label><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
+
+      <label>Treatments Tried:</label><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
+
+      <label>Referring Physician:</label><br>
+      <input type="text"><br><br>
+
+      <label>Urgency Level:</label><br>
+      <select>
+        <option>Routine</option>
+        <option>Urgent</option>
+      </select><br><br>
+    </form>
+    """
+else:
+    form_output = SAMPLE_FORMS.get(form_type, "<p><em>Demo form not available.</em></p>")
+t = SAMPLE_FORMS.get(form_type, "<p><em>Custom demo form output here.</em></p>")
             st.markdown(form_output, unsafe_allow_html=True)
 
             # ✅ Add download button (based on form type)
