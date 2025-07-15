@@ -165,6 +165,14 @@ if st.button("Generate Form"):
         if demo_mode:
             form_output = SAMPLE_FORMS.get(form_type, "<p><em>Custom demo form output here.</em></p>")
             st.markdown(form_output, unsafe_allow_html=True)
+            st.markdown(
+    """
+    <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
+        🖨️ Print or Save as PDF
+    </button>
+    """,
+    unsafe_allow_html=True
+)
         else:
             try:
                 form_output = call_openai_api(prompt)
