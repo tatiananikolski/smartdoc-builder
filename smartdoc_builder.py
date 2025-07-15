@@ -1,7 +1,6 @@
 import streamlit as st
 import os
 
-# Only import openai if not in demo mode (to avoid errors when openai isn't installed)
 try:
     import openai
 except ImportError:
@@ -12,7 +11,6 @@ st.set_page_config(page_title="SmartDoc Builder", layout="centered")
 st.title("🧠 SmartDoc Builder")
 st.subheader("Generate medical forms with AI")
 
-# Form type selector
 form_type = st.selectbox("Select a form type", [
     "Cardiology Intake Form",
     "Nuclear Test Consent Form",
@@ -20,55 +18,116 @@ form_type = st.selectbox("Select a form type", [
     "Custom"
 ])
 
-# Tone selector
 tone = st.radio("Select tone", ["Plain English", "Formal Medical"])
 
-# Custom input box
 custom_input = ""
 if form_type == "Custom":
     custom_input = st.text_area("Describe the form you want")
 
-# Demo mode toggle
 demo_mode = st.checkbox("Demo Mode (Use sample outputs, no API calls)")
 
-# Sample canned outputs
 SAMPLE_FORMS = {
     "Cardiology Intake Form": """
     <h2>Cardiology Intake Form</h2>
-    <p><strong>Patient Demographics:</strong> Name, DOB, Contact Info</p>
-    <p><strong>Reason for Visit:</strong> Symptoms, Referral Reason</p>
-    <p><strong>Past Medical History:</strong> Cardiovascular conditions, Surgeries</p>
-    <p><strong>Current Medications:</strong> List with dosages</p>
-    <p><strong>Allergies:</strong> Known allergies</p>
-    <p><strong>Family History:</strong> Heart disease, Hypertension</p>
-    <p><strong>Lifestyle:</strong> Smoking, Alcohol, Exercise habits</p>
-    <p><strong>Previous Cardiac Tests:</strong> EKG, Echo, Stress test results</p>
+    <form>
+      <label>Full Name:</label><br>
+      <input type="text" name="fullname"><br><br>
+
+      <label>Date of Birth:</label><br>
+      <input type="date" name="dob"><br><br>
+
+      <label>Reason for Visit:</label><br>
+      <textarea name="reason" rows="3" cols="40"></textarea><br><br>
+
+      <label>Past Medical History (Cardiac):</label><br>
+      <textarea name="history" rows="3" cols="40"></textarea><br><br>
+
+      <label>Current Medications:</label><br>
+      <textarea name="medications" rows="3" cols="40"></textarea><br><br>
+
+      <label>Allergies:</label><br>
+      <textarea name="allergies" rows="2" cols="40"></textarea><br><br>
+
+      <label>Family History of Heart Disease:</label><br>
+      <textarea name="family" rows="2" cols="40"></textarea><br><br>
+
+      <label>Lifestyle (Smoking, Alcohol, Exercise):</label><br>
+      <textarea name="lifestyle" rows="2" cols="40"></textarea><br><br>
+
+      <label>Previous Cardiac Tests:</label><br>
+      <textarea name="tests" rows="3" cols="40"></textarea><br><br>
+    </form>
     """,
 
     "Nuclear Test Consent Form": """
-    <h2>Nuclear Stress Test Consent Form</h2>
-    <p><strong>Purpose:</strong> To evaluate heart function using nuclear imaging.</p>
-    <p><strong>Procedure:</strong> Explanation of the nuclear stress test.</p>
-    <p><strong>Risks and Benefits:</strong> Minimal radiation exposure, possible side effects.</p>
-    <p><strong>Alternatives:</strong> Other cardiac stress tests or imaging.</p>
-    <p><strong>Acknowledgment:</strong> Patient understands the procedure and consents.</p>
-    <p><strong>Signatures:</strong> Patient and Physician signature fields.</p>
+    <h2>Nuclear Stress Test - Consent Form</h2>
+    <form>
+      <p><strong>Purpose of the Procedure:</strong><br>
+      A nuclear stress test is used to evaluate blood flow to your heart muscle, both at rest and during stress.</p>
+
+      <p><strong>Procedure Description:</strong><br>
+      You will receive a small amount of radioactive material and undergo imaging after exercise or medication-induced stress.</p>
+
+      <p><strong>Risks:</strong><br>
+      Minor side effects may include nausea, dizziness, or allergic reaction to the tracer.</p>
+
+      <p><strong>Alternatives:</strong><br>
+      Echocardiogram, treadmill test, or no testing.</p>
+
+      <p><strong>Benefits:</strong><br>
+      Accurate assessment of cardiac function and identification of blocked arteries.</p>
+
+      <label>Patient Initials:</label><br>
+      <input type="text" name="initials"><br><br>
+
+      <label>Patient Signature:</label><br>
+      <input type="text" name="signature"><br><br>
+
+      <label>Date:</label><br>
+      <input type="date" name="date"><br><br>
+
+      <label>Physician Signature:</label><br>
+      <input type="text" name="physician"><br><br>
+    </form>
     """,
 
     "Endocrinology Intake Form": """
     <h2>Endocrinology Intake Form</h2>
-    <p><strong>Patient Demographics:</strong> Name, DOB, Contact Info</p>
-    <p><strong>Reason for Visit:</strong> Diabetes, Thyroid issues, Hormone imbalance</p>
-    <p><strong>Past Medical History:</strong> Endocrine disorders, Surgeries</p>
-    <p><strong>Medications:</strong> Insulin, Hormone therapy</p>
-    <p><strong>Allergies:</strong> Known allergies</p>
-    <p><strong>Symptoms Checklist:</strong> Fatigue, Weight changes, Mood changes</p>
-    <p><strong>Lifestyle & Diet:</strong> Exercise, Nutrition habits</p>
-    <p><strong>Previous Lab Results:</strong> Recent blood tests, Imaging</p>
-    """,
+    <form>
+      <label>Full Name:</label><br>
+      <input type="text" name="fullname"><br><br>
+
+      <label>Date of Birth:</label><br>
+      <input type="date" name="dob"><br><br>
+
+      <label>Reason for Visit:</label><br>
+      <textarea name="reason" rows="3" cols="40" placeholder="e.g., Thyroid disorder, Diabetes, Hormonal issues"></textarea><br><br>
+
+      <label>Past Medical History (Endocrine):</label><br>
+      <textarea name="history" rows="3" cols="40"></textarea><br><br>
+
+      <label>Current Medications:</label><br>
+      <textarea name="medications" rows="3" cols="40"></textarea><br><br>
+
+      <label>Allergies:</label><br>
+      <textarea name="allergies" rows="2" cols="40"></textarea><br><br>
+
+      <label>Symptoms Checklist:</label><br>
+      <input type="checkbox"> Fatigue<br>
+      <input type="checkbox"> Weight Gain/Loss<br>
+      <input type="checkbox"> Mood Changes<br>
+      <input type="checkbox"> Excessive Thirst<br>
+      <input type="checkbox"> Hair Loss<br><br>
+
+      <label>Lifestyle & Diet Overview:</label><br>
+      <textarea name="lifestyle" rows="3" cols="40"></textarea><br><br>
+
+      <label>Prior Lab Results (if known):</label><br>
+      <textarea name="labs" rows="3" cols="40"></textarea><br><br>
+    </form>
+    """
 }
 
-# Helper functions
 def generate_prompt(form_type, custom_input, tone):
     if form_type == "Custom":
         return f"You are a medical administrator. Create a {tone.lower()} medical form based on the following request: {custom_input}"
@@ -99,7 +158,6 @@ def call_openai_api(prompt):
     )
     return response.choices[0].message['content']
 
-# Main form generation
 if st.button("Generate Form"):
     with st.spinner("Generating form..."):
         prompt = generate_prompt(form_type, custom_input, tone)
