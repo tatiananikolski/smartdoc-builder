@@ -31,31 +31,31 @@ SAMPLE_FORMS = {
     <h2>Cardiology Intake Form</h2>
     <form>
       <label>Full Name:</label><br>
-      <input type="text" name="fullname"><br><br>
+      <input type="text"><br><br>
 
       <label>Date of Birth:</label><br>
-      <input type="date" name="dob"><br><br>
+      <input type="date"><br><br>
 
       <label>Reason for Visit:</label><br>
-      <textarea name="reason" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
 
       <label>Past Medical History (Cardiac):</label><br>
-      <textarea name="history" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
 
       <label>Current Medications:</label><br>
-      <textarea name="medications" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
 
       <label>Allergies:</label><br>
-      <textarea name="allergies" rows="2" cols="40"></textarea><br><br>
+      <textarea rows="2" cols="40"></textarea><br><br>
 
       <label>Family History of Heart Disease:</label><br>
-      <textarea name="family" rows="2" cols="40"></textarea><br><br>
+      <textarea rows="2" cols="40"></textarea><br><br>
 
       <label>Lifestyle (Smoking, Alcohol, Exercise):</label><br>
-      <textarea name="lifestyle" rows="2" cols="40"></textarea><br><br>
+      <textarea rows="2" cols="40"></textarea><br><br>
 
       <label>Previous Cardiac Tests:</label><br>
-      <textarea name="tests" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
     </form>
     """,
 
@@ -78,16 +78,16 @@ SAMPLE_FORMS = {
       Accurate assessment of cardiac function and identification of blocked arteries.</p>
 
       <label>Patient Initials:</label><br>
-      <input type="text" name="initials"><br><br>
+      <input type="text"><br><br>
 
       <label>Patient Signature:</label><br>
-      <input type="text" name="signature"><br><br>
+      <input type="text"><br><br>
 
       <label>Date:</label><br>
-      <input type="date" name="date"><br><br>
+      <input type="date"><br><br>
 
       <label>Physician Signature:</label><br>
-      <input type="text" name="physician"><br><br>
+      <input type="text"><br><br>
     </form>
     """,
 
@@ -95,22 +95,22 @@ SAMPLE_FORMS = {
     <h2>Endocrinology Intake Form</h2>
     <form>
       <label>Full Name:</label><br>
-      <input type="text" name="fullname"><br><br>
+      <input type="text"><br><br>
 
       <label>Date of Birth:</label><br>
-      <input type="date" name="dob"><br><br>
+      <input type="date"><br><br>
 
       <label>Reason for Visit:</label><br>
-      <textarea name="reason" rows="3" cols="40" placeholder="e.g., Thyroid disorder, Diabetes, Hormonal issues"></textarea><br><br>
+      <textarea rows="3" cols="40" placeholder="e.g., Thyroid disorder, Diabetes, Hormonal issues"></textarea><br><br>
 
       <label>Past Medical History (Endocrine):</label><br>
-      <textarea name="history" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
 
       <label>Current Medications:</label><br>
-      <textarea name="medications" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
 
       <label>Allergies:</label><br>
-      <textarea name="allergies" rows="2" cols="40"></textarea><br><br>
+      <textarea rows="2" cols="40"></textarea><br><br>
 
       <label>Symptoms Checklist:</label><br>
       <input type="checkbox"> Fatigue<br>
@@ -120,18 +120,38 @@ SAMPLE_FORMS = {
       <input type="checkbox"> Hair Loss<br><br>
 
       <label>Lifestyle & Diet Overview:</label><br>
-      <textarea name="lifestyle" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
 
       <label>Prior Lab Results (if known):</label><br>
-      <textarea name="labs" rows="3" cols="40"></textarea><br><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
+    </form>
+    """,
+
+    "Custom": """
+    <h2>Dermatology Referral Form</h2>
+    <form>
+      <label>Patient Name:</label><br>
+      <input type="text"><br><br>
+
+      <label>Date of Birth:</label><br>
+      <input type="date"><br><br>
+
+      <label>Diagnosis:</label><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
+
+      <label>Treatments Tried:</label><br>
+      <textarea rows="3" cols="40"></textarea><br><br>
+
+      <label>Referring Physician:</label><br>
+      <input type="text"><br><br>
+
+      <label>Urgency Level:</label><br>
+      <select>
+        <option>Routine</option>
+        <option>Urgent</option>
+      </select><br><br>
     </form>
     """
-}
-# PDF Download Links
-PDF_LINKS = {
-    "Cardiology Intake Form": "https://drive.google.com/uc?export=download&id=1yGDs2--MvUlVJPnOkikAn8FTJMSWy68v",
-    "Nuclear Test Consent Form": "https://drive.google.com/uc?export=download&id=1a3YQuTujX5EDGiX-z1IMcsEC7Sv62JWD",
-    "Endocrinology Intake Form": "https://drive.google.com/uc?export=download&id=1-vAj3pHfb4B7aCoWvbfXxvBT8U86szwh"
 }
 
 def generate_prompt(form_type, custom_input, tone):
@@ -163,62 +183,20 @@ def call_openai_api(prompt):
         max_tokens=1500
     )
     return response.choices[0].message['content']
+
 if st.button("Generate Form"):
     with st.spinner("Generating form..."):
         prompt = generate_prompt(form_type, custom_input, tone)
 
         if demo_mode:
-            form_outpuif form_type == "Custom":
-    form_output = """
-    <h2>Dermatology Referral Form</h2>
-    <form>
-      <label>Patient Name:</label><br>
-      <input type="text"><br><br>
-
-      <label>Date of Birth:</label><br>
-      <input type="date"><br><br>
-
-      <label>Diagnosis:</label><br>
-      <textarea rows="3" cols="40"></textarea><br><br>
-
-      <label>Treatments Tried:</label><br>
-      <textarea rows="3" cols="40"></textarea><br><br>
-
-      <label>Referring Physician:</label><br>
-      <input type="text"><br><br>
-
-      <label>Urgency Level:</label><br>
-      <select>
-        <option>Routine</option>
-        <option>Urgent</option>
-      </select><br><br>
-    </form>
-    """
-else:
-    form_output = SAMPLE_FORMS.get(form_type, "<p><em>Demo form not available.</em></p>")
-t = SAMPLE_FORMS.get(form_type, "<p><em>Custom demo form output here.</em></p>")
+            form_output = SAMPLE_FORMS.get(form_type, "<p><em>Demo form not available.</em></p>")
             st.markdown(form_output, unsafe_allow_html=True)
 
-            # ✅ Add download button (based on form type)
-            if form_type in PDF_LINKS:
-                pdf_link = PDF_LINKS[form_type]
-                st.markdown(
-                    f"""
-                    <a href="{pdf_link}" download target="_blank">
-                        <button style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
-                            ⬇️ Download This Form as PDF
-                        </button>
-                    </a>
-                    """,
-                    unsafe_allow_html=True
-                )
-
-            # ✅ Add print button (works in local, may not work in Streamlit Cloud)
             st.markdown(
                 """
-                <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
-                    🖨️ Print or Save as PDF
-                </button>
+                <p style="color: gray; font-size: 14px;">
+                🛈 In Demo Mode, this is a pre-generated sample form for demonstration purposes only. To enable live form generation, please disable Demo Mode and set up OpenAI API access.
+                </p>
                 """,
                 unsafe_allow_html=True
             )
@@ -230,3 +208,5 @@ t = SAMPLE_FORMS.get(form_type, "<p><em>Custom demo form output here.</em></p>")
             except Exception as e:
                 st.error(f"Error during API call: {e}")
 
+st.markdown("---")
+st.caption("No PHI is used or stored. This is a prototype demo created by a non-technical user using ChatGPT and Streamlit.")
