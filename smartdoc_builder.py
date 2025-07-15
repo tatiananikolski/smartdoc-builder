@@ -169,7 +169,7 @@ if st.button("Generate Form"):
     """
     <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
         🖨️ Print or Save as PDF
-    </button>
+    </a>
     """,
     unsafe_allow_html=True
 )
