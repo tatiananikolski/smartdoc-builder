@@ -127,6 +127,12 @@ SAMPLE_FORMS = {
     </form>
     """
 }
+# PDF Download Links
+PDF_LINKS = {
+    "Cardiology Intake Form": "https://drive.google.com/uc?export=download&id=1yGDs2--MvUlVJPnOkikAn8FTJMSWy68v",
+    "Nuclear Test Consent Form": "https://drive.google.com/uc?export=download&id=1a3YQuTujX5EDGiX-z1IMcsEC7Sv62JWD",
+    "Endocrinology Intake Form": "https://drive.google.com/uc?export=download&id=1-vAj3pHfb4B7aCoWvbfXxvBT8U86szwh"
+}
 
 def generate_prompt(form_type, custom_input, tone):
     if form_type == "Custom":
@@ -165,6 +171,20 @@ if st.button("Generate Form"):
         if demo_mode:
             form_output = SAMPLE_FORMS.get(form_type, "<p><em>Custom demo form output here.</em></p>")
             st.markdown(form_output, unsafe_allow_html=True)
+                # ✅ Add download button (based on form type)
+    if form_type in PDF_LINKS:
+        pdf_link = PDF_LINKS[form_type]
+        st.markdown(
+            f"""
+            <a href="{pdf_link}" download target="_blank">
+                <button style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
+                    ⬇️ Download This Form as PDF
+                </button>
+            </a>
+            """,
+            unsafe_allow_html=True
+        )
+
             st.markdown(
     """
     <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
