@@ -163,7 +163,6 @@ def call_openai_api(prompt):
         max_tokens=1500
     )
     return response.choices[0].message['content']
-
 if st.button("Generate Form"):
     with st.spinner("Generating form..."):
         prompt = generate_prompt(form_type, custom_input, tone)
@@ -171,28 +170,31 @@ if st.button("Generate Form"):
         if demo_mode:
             form_output = SAMPLE_FORMS.get(form_type, "<p><em>Custom demo form output here.</em></p>")
             st.markdown(form_output, unsafe_allow_html=True)
-                # ✅ Add download button (based on form type)
-    if form_type in PDF_LINKS:
-        pdf_link = PDF_LINKS[form_type]
-        st.markdown(
-            f"""
-            <a href="{pdf_link}" download target="_blank">
-                <button style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
-                    ⬇️ Download This Form as PDF
-                </button>
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
 
+            # ✅ Add download button (based on form type)
+            if form_type in PDF_LINKS:
+                pdf_link = PDF_LINKS[form_type]
+                st.markdown(
+                    f"""
+                    <a href="{pdf_link}" download target="_blank">
+                        <button style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
+                            ⬇️ Download This Form as PDF
+                        </button>
+                    </a>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            # ✅ Add print button (works in local, may not work in Streamlit Cloud)
             st.markdown(
-    """
-    <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
-        🖨️ Print or Save as PDF
-    </a>
-    """,
-    unsafe_allow_html=True
-)
+                """
+                <button onclick="window.print()" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">
+                    🖨️ Print or Save as PDF
+                </button>
+                """,
+                unsafe_allow_html=True
+            )
+
         else:
             try:
                 form_output = call_openai_api(prompt)
@@ -200,5 +202,3 @@ if st.button("Generate Form"):
             except Exception as e:
                 st.error(f"Error during API call: {e}")
 
-st.markdown("---")
-st.caption("No PHI is used or stored. This is a prototype for demo purposes.")
